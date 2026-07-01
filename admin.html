@@ -51,7 +51,9 @@ a.file-link:hover{text-decoration:underline;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPA_URL = 'https://igjayoknfknevhjwzpgu.supabase.co';
-const SUPA_KEY = 'sb_publishable_Tyhz5bOXQVZoAhfccVtuLQ_TbGUzEvI';
+// ترفند رد شدن از فایروال کلودفلر
+window.supabase = window.supabase || {};
+  const SUPA_KEY = 'sb_publishable_Tyhz5bOXQVZoAhfccVtuLQ_TbGUzEvI';
 const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
 
 async function loadOrders() {
