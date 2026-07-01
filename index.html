@@ -471,6 +471,16 @@ async function submitOrder(){
 
     if(error) throw error;
 
+    // Send Telegram notification
+    const BOT_TOKEN = '8908700785:AAGSfSeWjmldHcGeDccOJ_Pao6vz0Ps5t5Q';
+    const CHAT_ID = '7759814343';
+    const msg = `🔔 سفارش جدید!\n\n👤 نام: ${name}\n📞 تلفن: ${phone}\n🔧 خدمت: ${service}\n⚙️ جنس: ${material || '-'}\n🔢 تعداد: ${quantity}\n📝 توضیحات: ${description || '-'}`;
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: CHAT_ID, text: msg})
+    });
+
     // Success
     successBox.style.display = 'block';
     // Reset form
