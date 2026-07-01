@@ -350,7 +350,6 @@ footer{background:var(--steel-900);color:var(--steel-400);padding:2rem 1.5rem;te
         <textarea id="field-description" placeholder="ابعاد قطعه، تلرانس مورد نیاز و سایر جزئیات..."></textarea>
       </div>
       
-      <!-- باکس آپلود واقعی -->
       <div class="form-row">
         <label>آپلود نقشه یا عکس قطعه</label>
         <div class="upload-box" id="upload-area" onclick="document.getElementById('field-file').click()">
@@ -445,6 +444,22 @@ function handleFileSelect(input) {
   }
 }
 
+// ── تابع تبدیل عکس برای ارسال به تلگرام ──
+async function getImageForTelegram(fileUrl) {
+  if (!fileUrl) return null;
+  try {
+    const response = await fetch(fileUrl);
+    const blob = await response.blob();
+    const reader = new FileReader();
+    return new Promise((resolve) => {
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(blob);
+    });
+  } catch (e) {
+    return null; 
+  }
+}
+
 // ── Submit order ──
 async function submitOrder(){
   const btn = document.getElementById('submit-btn');
@@ -471,9 +486,7 @@ async function submitOrder(){
   try {
     let fileUrl = null;
 
-    // اگر فایلی انتخاب شده بود، اول آپلود میکنیم
     if (selectedFile) {
-      // ساخت یک اسم یکتا برای فایل تا جلوی تداخل گرفته بشه
       const fileExt = selectedFile.name.split('.').pop();
       const filePath = `${phone}_${Date.now()}.${fileExt}`;
 
@@ -483,12 +496,10 @@ async function submitOrder(){
 
       if (uploadError) throw new Error('خطا در آپلود فایل: ' + uploadError.message);
 
-      // گرفتن لینک عمومی فایل
       const { data: urlData } = db.storage.from('order-files').getPublicUrl(filePath);
       fileUrl = urlData.publicUrl;
     }
 
-    // ثبت اطلاعات در دیتابیس
     const { error } = await db.from('orders').insert([{
       full_name: name,
       phone: phone,
@@ -502,15 +513,37 @@ async function submitOrder(){
 
     if(error) throw error;
 
-    // ارسال پیام به تلگرام
+    // ── ارسال هوشمند به تلگرام ──
     const BOT_TOKEN = '8908700785:AAGSfSeWjmldHcGeDccOJ_Pao6vz0Ps5t5Q';
     const CHAT_ID = '7759814343';
-    const msg = `🔔 سفارش جدید!\n\n👤 نام: ${name}\n📞 تلفن: ${phone}\n🔧 خدمت: ${service}\n⚙️ جنس: ${material || '-'}\n🔢 تعداد: ${quantity}\n📝 توضیحات: ${description || '-'}\n📎 فایل: ${fileUrl || 'ندارد'}`;
-    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-      method: 'POST',
-      headers: {'Content-Type':'application/json'},
-      body: JSON.stringify({chat_id: CHAT_ID, text: msg})
-    });
+    const msg = `🔔 سفارش جدید!\n\n👤 نام: ${name}\n📞 تلفن: ${phone}\n🔧 خدمت: ${service}\n⚙️ جنس: ${material || '-'}\n🔢 تعداد: ${quantity}\n📝 توضیحات: ${description || '-'}`;
+
+    if (fileUrl) {
+      const base64Image = await getImageForTelegram(fileUrl);
+      if (base64Image) {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            chat_id: CHAT_ID, 
+            photo: base64Image, 
+            caption: msg
+          })
+        });
+      } else {
+        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({chat_id: CHAT_ID, text: msg + '\n📎 لینک فایل: ' + fileUrl})
+        });
+      }
+    } else {
+      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: {'Content-Type':'application/json'},
+        body: JSON.stringify({chat_id: CHAT_ID, text: msg})
+      });
+    }
 
     successBox.style.display = 'block';
     ['field-name','field-phone','field-material','field-description'].forEach(id=>{ document.getElementById(id).value = ''; });
