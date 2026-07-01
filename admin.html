@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>پنل مدیریت - تراشکاری البرز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Vazirmatn',sans-serif;background:#f3f4f5;color:#15171a;direction:rtl;}
+nav{background:#1e2125;position:sticky;top:0;z-index:100;border-bottom:3px solid #c08a3e;padding:1rem 1.5rem;display:flex;justify-content:space-between;align-items:center;}
+nav a{color:#dba85f;text-decoration:none;font-weight:700;font-size:15px;}
+.header{background:#fff;padding:1.5rem;border-bottom:1px solid #e4e6e8;}
+.container{max-width:1200px;margin:2rem auto;padding:0 1.5rem;}
+table{width:100%;background:#fff;border-collapse:collapse;border-radius:10px;overflow:hidden;box-shadow:0 4px 16px rgba(0,0,0,0.05);}
+th, td{padding:14px 16px;text-align:right;border-bottom:1px solid #f3f4f5;font-size:13.5px;}
+th{background:#f9fafb;font-weight:700;color:#565c64;}
+td{color:#15171a;}
+select{padding:6px 10px;border:1px solid #e4e6e8;border-radius:6px;font-family:inherit;font-size:13px;cursor:pointer;background:#fff;}
+a.file-link{color:#c08a3e;text-decoration:none;font-weight:600;}
+a.file-link:hover{text-decoration:underline;}
+.no-data{text-align:center;padding:3rem;color:#565c64;}
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html">← بازگشت به سایت</a>
+  <span style="color:#fff;font-size:14px;">پنل مدیریت سفارشات</span>
+</nav>
+
+<div class="container">
+  <table>
+    <thead>
+      <tr>
+        <th>تاریخ</th>
+        <th>نام مشتری</th>
+        <th>تلفن</th>
+        <th>خدمت</th>
+        <th>فایل</th>
+        <th>وضعیت فعلی</th>
+        <th>تغییر وضعیت</th>
+      </tr>
+    </thead>
+    <tbody id="orders-tbody">
+      <tr><td colspan="7" class="no-data">در حال بارگذاری...</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+const SUPA_URL = 'https://igjayoknfknevhjwzpgu.supabase.co';
+const SUPA_KEY = 'sb_publishable_Tyhz5bOXQVZoAhfccVtuLQ_TbGUzEvI';
+const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+async function loadOrders() {
+  const tbody = document.getElementById('orders-tbody');
+  
+  const { data: orders, error } = await db.from('orders')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error || orders.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="7" class="no-data">هیچ سفارشی ثبت نشده است.</td></tr>';
+    return;
+  }
+
+  tbody.innerHTML = '';
+  orders.forEach(order => {
+    const date = new Date(order.created_at).toLocaleDateString('fa-IR');
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td>${date}</td>
+      <td>${order.full_name}</td>
+      <td>${order.phone}</td>
+      <td>${order.service_type}</td>
+      <td>${order.file_url ? `<a href="${order.file_url}" target="_blank" class="file-link">دانلود/مشاهده</a>` : 'ندارد'}</td>
+      <td><span class="status-badge">${order.status}</span></td>
+      <td>
+        <select onchange="updateStatus('${order.id}', this.value)">
+          <option value="جدید" ${order.status === 'جدید' ? 'selected' : ''}>جدید</option>
+          <option value="در حال ساخت" ${order.status === 'در حال ساخت' ? 'selected' : ''}>در حال ساخت</option>
+          <option value="تکمیل شده" ${order.status === 'تکمیل شده' ? 'selected' : ''}>تکمیل شده</option>
+        </select>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+async function updateStatus(id, newStatus) {
+  const { error } = await db.from('orders').update({ status: newStatus }).eq('id', id);
+  if (error) {
+    alert('خطا در تغییر وضعیت');
+  } else {
+    alert('وضعیت با موفقیت تغییر کرد!');
+    loadOrders(); // رفرش جدول
+  }
+}
+
+// لود اولیه
+loadOrders();
+</script>
+</body>
+</html>
