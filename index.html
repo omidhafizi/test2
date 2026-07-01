@@ -444,22 +444,6 @@ function handleFileSelect(input) {
   }
 }
 
-// ── تابع تبدیل عکس برای ارسال به تلگرام ──
-async function getImageForTelegram(fileUrl) {
-  if (!fileUrl) return null;
-  try {
-    const response = await fetch(fileUrl);
-    const blob = await response.blob();
-    const reader = new FileReader();
-    return new Promise((resolve) => {
-      reader.onloadend = () => resolve(reader.result);
-      reader.readAsDataURL(blob);
-    });
-  } catch (e) {
-    return null; 
-  }
-}
-
 // ── Submit order ──
 async function submitOrder(){
   const btn = document.getElementById('submit-btn');
@@ -513,37 +497,21 @@ async function submitOrder(){
 
     if(error) throw error;
 
-    // ── ارسال هوشمند به تلگرام ──
+    // ── ارسال پیام متنی به تلگرام (بهgether با لینک عکس) ──
     const BOT_TOKEN = '8908700785:AAGSfSeWjmldHcGeDccOJ_Pao6vz0Ps5t5Q';
     const CHAT_ID = '7759814343';
-    const msg = `🔔 سفارش جدید!\n\n👤 نام: ${name}\n📞 تلفن: ${phone}\n🔧 خدمت: ${service}\n⚙️ جنس: ${material || '-'}\n🔢 تعداد: ${quantity}\n📝 توضیحات: ${description || '-'}`;
-
+    let msg = `🔔 سفارش جدید!\n\n👤 نام: ${name}\n📞 تلفن: ${phone}\n🔧 خدمت: ${service}\n⚙️ جنس: ${material || '-'}\n🔢 تعداد: ${quantity}\n📝 توضیحات: ${description || '-'}`;
+    
+    // اگر عکسی آپلود شده بود، لینکش رو به پیام اضافه کن
     if (fileUrl) {
-      const base64Image = await getImageForTelegram(fileUrl);
-      if (base64Image) {
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({
-            chat_id: CHAT_ID, 
-            photo: base64Image, 
-            caption: msg
-          })
-        });
-      } else {
-        await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-          method: 'POST',
-          headers: {'Content-Type':'application/json'},
-          body: JSON.stringify({chat_id: CHAT_ID, text: msg + '\n📎 لینک فایل: ' + fileUrl})
-        });
-      }
-    } else {
-      await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-        method: 'POST',
-        headers: {'Content-Type':'application/json'},
-        body: JSON.stringify({chat_id: CHAT_ID, text: msg})
-      });
+      msg += `\n📎 لینک عکس/نقشه: ${fileUrl}`;
     }
+
+    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({chat_id: CHAT_ID, text: msg})
+    });
 
     successBox.style.display = 'block';
     ['field-name','field-phone','field-material','field-description'].forEach(id=>{ document.getElementById(id).value = ''; });
