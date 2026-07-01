@@ -71,7 +71,11 @@ async function trackOrder() {
     .eq('phone', phone)
     .order('created_at', { ascending: false });
 
-  if (error || orders.length === 0) {
+  if (error) {
+    resultsDiv.innerHTML = `<div class="no-order" style="color:red;">⚠️ خطا در اتصال به دیتابیس: ${error.message}</div>`;
+    return;
+  }
+  if (orders.length === 0) {
     resultsDiv.innerHTML = '<div class="no-order">❌ سفارشی با این شماره یافت نشد.</div>';
     return;
   }
