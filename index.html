@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>تراشکاری صنعتی البرز</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --steel-950:#15171a;
+  --steel-900:#1e2125;
+  --steel-800:#2a2e33;
+  --steel-700:#3a3f46;
+  --steel-600:#565c64;
+  --steel-400:#8a9098;
+  --steel-200:#c9cdd2;
+  --steel-100:#e4e6e8;
+  --steel-50:#f3f4f5;
+  --brass:#c08a3e;
+  --brass-light:#dba85f;
+  --brass-dark:#8f6628;
+  --spark:#ff8a3d;
+}
+body{font-family:'Vazirmatn',sans-serif;background:var(--steel-50);color:var(--steel-900);direction:rtl;line-height:1.7;}
+img,svg{display:block;max-width:100%;}
+.topbar{background:var(--steel-950);color:var(--steel-200);font-size:13px;padding:8px 0;}
+.topbar-inner{max-width:1180px;margin:0 auto;padding:0 1.5rem;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;}
+.topbar a{color:var(--steel-200);text-decoration:none;}
+.topbar .phone{color:var(--brass-light);font-weight:600;}
+nav{background:var(--steel-900);position:sticky;top:0;z-index:100;border-bottom:3px solid var(--brass);}
+.nav-inner{max-width:1180px;margin:0 auto;padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:72px;}
+.logo{display:flex;align-items:center;gap:10px;}
+.logo-mark{width:38px;height:38px;flex-shrink:0;}
+.logo-text{font-size:19px;font-weight:700;color:#fff;letter-spacing:0.3px;}
+.logo-text span{color:var(--brass-light);}
+.nav-links{display:flex;gap:0.25rem;list-style:none;}
+.nav-links a{color:var(--steel-200);text-decoration:none;font-size:14px;font-weight:500;padding:10px 16px;border-radius:6px;transition:all .2s;}
+.nav-links a:hover{background:var(--steel-800);color:#fff;}
+.nav-cta{background:var(--brass);color:var(--steel-950);padding:10px 22px;border-radius:6px;font-weight:700;font-size:14px;text-decoration:none;transition:background .2s;}
+.nav-cta:hover{background:var(--brass-light);}
+.burger{display:none;background:none;border:none;color:#fff;font-size:24px;cursor:pointer;}
+.hero{position:relative;background:var(--steel-950);color:#fff;overflow:hidden;padding:5rem 1.5rem 6rem;}
+.hero-bg-pattern{position:absolute;inset:0;opacity:0.06;background-image:repeating-linear-gradient(45deg,#fff 0,#fff 1px,transparent 1px,transparent 14px);}
+.hero-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1.1fr 0.9fr;gap:3rem;align-items:center;position:relative;z-index:2;}
+.eyebrow{display:inline-flex;align-items:center;gap:8px;color:var(--brass-light);font-size:13px;font-weight:700;letter-spacing:1px;margin-bottom:1.25rem;}
+.eyebrow::before{content:'';width:24px;height:2px;background:var(--brass-light);}
+.hero h1{font-size:clamp(2.1rem,4.2vw,3.4rem);font-weight:900;line-height:1.25;margin-bottom:1.25rem;}
+.hero h1 .accent{color:var(--brass-light);}
+.hero p{font-size:1.05rem;color:var(--steel-200);max-width:520px;margin-bottom:2rem;}
+.hero-btns{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-primary{background:var(--brass);color:var(--steel-950);padding:14px 30px;border-radius:6px;font-weight:700;font-size:15px;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-primary:hover{background:var(--brass-light);transform:translateY(-2px);}
+.btn-ghost{border:2px solid var(--steel-700);color:#fff;padding:12px 28px;border-radius:6px;font-weight:600;font-size:15px;text-decoration:none;background:transparent;cursor:pointer;font-family:inherit;transition:all .2s;}
+.btn-ghost:hover{border-color:var(--brass-light);color:var(--brass-light);}
+.hero-visual{display:flex;align-items:center;justify-content:center;}
+.dial-wrap{position:relative;width:280px;height:280px;}
+.dial-ring{position:absolute;inset:0;border-radius:50%;border:2px solid var(--steel-700);}
+.dial-ring-inner{position:absolute;inset:18px;border-radius:50%;border:1px solid var(--steel-800);background:radial-gradient(circle,var(--steel-900) 0%,var(--steel-950) 100%);}
+.dial-tick{position:absolute;width:2px;height:14px;background:var(--steel-600);top:0;left:50%;transform-origin:1px 140px;}
+.dial-tick.major{background:var(--brass-light);height:18px;width:3px;}
+.dial-needle{position:absolute;top:50%;left:50%;width:3px;height:100px;background:var(--spark);transform-origin:bottom center;transform:translate(-50%,-100%) rotate(35deg);border-radius:2px;animation:spin 6s ease-in-out infinite;}
+@keyframes spin{0%,100%{transform:translate(-50%,-100%) rotate(35deg);}50%{transform:translate(-50%,-100%) rotate(310deg);}}
+.dial-center{position:absolute;top:50%;left:50%;width:16px;height:16px;background:var(--brass);border-radius:50%;transform:translate(-50%,-50%);box-shadow:0 0 0 4px var(--steel-950),0 0 0 5px var(--steel-700);}
+.dial-label{position:absolute;bottom:-44px;left:50%;transform:translateX(-50%);text-align:center;width:100%;}
+.dial-label .num{font-size:13px;color:var(--brass-light);font-weight:700;letter-spacing:1px;}
+.dial-label .txt{font-size:12px;color:var(--steel-400);margin-top:2px;}
+.stats{background:var(--steel-800);border-top:1px solid var(--steel-700);}
+.stats-inner{max-width:1180px;margin:0 auto;padding:1.75rem 1.5rem;display:grid;grid-template-columns:repeat(4,1fr);gap:1.5rem;}
+.stat{text-align:center;color:#fff;}
+.stat-num{font-size:1.9rem;font-weight:900;color:var(--brass-light);}
+.stat-label{font-size:12.5px;color:var(--steel-200);margin-top:2px;}
+.sec{max-width:1180px;margin:0 auto;padding:5rem 1.5rem;}
+.sec-head{text-align:center;max-width:560px;margin:0 auto 3rem;}
+.sec-eyebrow{color:var(--brass-dark);font-weight:700;font-size:13px;letter-spacing:1px;margin-bottom:0.5rem;}
+.sec-title{font-size:clamp(1.6rem,3vw,2.2rem);font-weight:800;color:var(--steel-950);}
+.sec-sub{color:var(--steel-600);font-size:0.95rem;margin-top:0.75rem;}
+.services-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.svc-card{background:#fff;border:1px solid var(--steel-100);border-radius:10px;padding:2rem 1.75rem;transition:all .25s;position:relative;overflow:hidden;}
+.svc-card:hover{border-color:var(--brass);box-shadow:0 12px 32px rgba(0,0,0,0.08);transform:translateY(-4px);}
+.svc-icon{width:52px;height:52px;background:var(--steel-950);border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:1.25rem;}
+.svc-card h3{font-size:1.05rem;font-weight:700;margin-bottom:0.6rem;color:var(--steel-950);}
+.svc-card p{font-size:0.875rem;color:var(--steel-600);margin-bottom:1rem;}
+.svc-price{font-size:13px;color:var(--brass-dark);font-weight:700;border-top:1px solid var(--steel-100);padding-top:0.85rem;}
+.gallery-section{background:var(--steel-950);padding:5rem 1.5rem;}
+.gallery-inner{max-width:1180px;margin:0 auto;}
+.gallery-inner .sec-head{color:#fff;}
+.gallery-inner .sec-sub{color:var(--steel-400);}
+.gallery-inner .sec-eyebrow{color:var(--brass-light);}
+.gallery-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;}
+.g-item{aspect-ratio:1;border-radius:8px;background:var(--steel-800);border:1px solid var(--steel-700);display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;transition:all .25s;}
+.g-item:hover{border-color:var(--brass);transform:scale(1.03);}
+.g-item .part-icon{width:54%;height:54%;}
+.g-item .g-label{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,0.85),transparent);color:#fff;font-size:11px;padding:8px 10px 6px;text-align:center;}
+.order-section{background:var(--steel-50);}
+.order-wrap{display:grid;grid-template-columns:1fr 1fr;gap:3rem;align-items:start;}
+.order-info h2{font-size:1.7rem;font-weight:800;margin-bottom:1rem;color:var(--steel-950);}
+.order-info p{color:var(--steel-600);margin-bottom:1.75rem;font-size:0.95rem;}
+.order-steps{display:flex;flex-direction:column;gap:1.1rem;}
+.o-step{display:flex;gap:14px;align-items:flex-start;}
+.o-step-num{width:30px;height:30px;border-radius:50%;background:var(--steel-950);color:var(--brass-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex-shrink:0;}
+.o-step-text strong{display:block;font-size:14.5px;color:var(--steel-950);margin-bottom:2px;}
+.o-step-text span{font-size:13px;color:var(--steel-600);}
+.order-form{background:#fff;border:1px solid var(--steel-100);border-radius:12px;padding:2.25rem;box-shadow:0 8px 28px rgba(0,0,0,0.05);}
+.form-row{margin-bottom:1.1rem;}
+.form-row label{display:block;font-size:13px;font-weight:600;color:var(--steel-900);margin-bottom:6px;}
+.form-row input,.form-row select,.form-row textarea{width:100%;padding:11px 14px;border:1.5px solid var(--steel-100);border-radius:7px;font-family:inherit;font-size:14px;color:var(--steel-900);background:var(--steel-50);transition:border-color .2s;}
+.form-row input:focus,.form-row select:focus,.form-row textarea:focus{outline:none;border-color:var(--brass);}
+.form-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:1rem;}
+.form-row textarea{resize:vertical;min-height:80px;}
+.upload-box{border:2px dashed var(--steel-200);border-radius:8px;padding:1.5rem;text-align:center;cursor:pointer;transition:all .2s;background:var(--steel-50);}
+.upload-box:hover{border-color:var(--brass);background:#fdf8f0;}
+.upload-box .up-icon{width:32px;height:32px;margin:0 auto 8px;}
+.upload-box span{font-size:13px;color:var(--steel-600);}
+.submit-btn{width:100%;background:var(--steel-950);color:#fff;padding:15px;border-radius:8px;border:none;font-weight:700;font-size:15px;font-family:inherit;cursor:pointer;margin-top:0.5rem;transition:background .2s;}
+.submit-btn:hover{background:var(--brass-dark);}
+.form-note{font-size:11.5px;color:var(--steel-400);text-align:center;margin-top:10px;}
+.panel-note{background:#fff7ea;border:1px solid var(--brass-light);border-radius:8px;padding:0.85rem 1.1rem;font-size:12.5px;color:var(--brass-dark);margin-bottom:1.5rem;display:flex;gap:8px;align-items:flex-start;}
+.testi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.5rem;}
+.testi-card{background:#fff;border:1px solid var(--steel-100);border-radius:10px;padding:1.75rem;}
+.testi-stars{color:var(--brass);font-size:14px;margin-bottom:0.85rem;letter-spacing:2px;}
+.testi-card p{font-size:0.9rem;color:var(--steel-700);margin-bottom:1.1rem;}
+.testi-person{display:flex;align-items:center;gap:10px;}
+.testi-avatar{width:36px;height:36px;border-radius:50%;background:var(--steel-900);color:var(--brass-light);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;}
+.testi-name{font-size:13px;font-weight:700;color:var(--steel-950);}
+.testi-role{font-size:11.5px;color:var(--steel-400);}
+.contact-section{background:var(--steel-950);color:#fff;padding:4.5rem 1.5rem;}
+.contact-inner{max-width:1180px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:3rem;}
+.contact-inner h2{font-size:1.8rem;font-weight:800;margin-bottom:1rem;}
+.contact-inner > div:first-child p{color:var(--steel-300);font-size:0.95rem;margin-bottom:1.75rem;max-width:420px;}
+.c-row{display:flex;gap:14px;align-items:flex-start;margin-bottom:1.25rem;}
+.c-icon{width:38px;height:38px;background:var(--steel-800);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;border:1px solid var(--steel-700);}
+.c-row strong{display:block;font-size:14px;margin-bottom:2px;}
+.c-row span{font-size:13.5px;color:var(--steel-300);}
+.map-box{background:var(--steel-900);border:1px solid var(--steel-700);border-radius:10px;height:100%;min-height:260px;display:flex;align-items:center;justify-content:center;color:var(--steel-500);font-size:13px;}
+footer{background:var(--steel-900);color:var(--steel-400);padding:2rem 1.5rem;text-align:center;font-size:12.5px;border-top:1px solid var(--steel-700);}
+@media(max-width:900px){
+  .hero-inner{grid-template-columns:1fr;}
+  .hero-visual{order:-1;margin-bottom:1rem;}
+  .stats-inner{grid-template-columns:repeat(2,1fr);}
+  .services-grid{grid-template-columns:1fr;}
+  .gallery-grid{grid-template-columns:repeat(2,1fr);}
+  .order-wrap{grid-template-columns:1fr;}
+  .testi-grid{grid-template-columns:1fr;}
+  .contact-inner{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .burger{display:block;}
+}
+@media(max-width:600px){
+  .form-grid-2{grid-template-columns:1fr;}
+  .dial-wrap{width:220px;height:220px;}
+  .nav-cta{display:none;}
+}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <span>سفارش‌گیری از ۸ صبح تا ۸ شب — همه روزه</span>
+    <a href="tel:03135551234" class="phone">📞 ۰۳۱۳۵۵۵۱۲۳۴</a>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo">
+      <svg class="logo-mark" viewBox="0 0 40 40" fill="none">
+        <circle cx="20" cy="20" r="18" stroke="#c08a3e" stroke-width="2"/>
+        <circle cx="20" cy="20" r="6" fill="#c08a3e"/>
+        <path d="M20 2V8M20 32V38M38 20H32M8 20H2M33.6 6.4L29.4 10.6M10.6 29.4L6.4 33.6M33.6 33.6L29.4 29.4M10.6 10.6L6.4 6.4" stroke="#565c64" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+      <div class="logo-text">تراشکاری <span>البرز</span></div>
+    </div>
+    <ul class="nav-links">
+      <li><a href="#services">خدمات</a></li>
+      <li><a href="#gallery">نمونه کارها</a></li>
+      <li><a href="#order">سفارش آنلاین</a></li>
+      <li><a href="#about">درباره ما</a></li>
+      <li><a href="#contact">تماس</a></li>
+    </ul>
+    <a href="#order" class="nav-cta">ثبت سفارش</a>
+    <button class="burger">☰</button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg-pattern"></div>
+  <div class="hero-inner">
+    <div>
+      <div class="eyebrow">۲۵ سال تجربه در صنعت ماشین‌کاری</div>
+      <h1>تراشکاری دقیق برای <span class="accent">قطعات صنعتی</span> شما</h1>
+      <p>از تراش ساده تا فرز CNC و جوشکاری تخصصی — سفارش‌تون رو آنلاین ثبت کنید، وضعیتش رو لحظه‌ای پیگیری کنید.</p>
+      <div class="hero-btns">
+        <a href="#order" class="btn-primary">ثبت سفارش آنلاین</a>
+        <a href="#gallery" class="btn-ghost">مشاهده نمونه کارها</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="dial-wrap">
+        <div class="dial-ring"></div>
+        <div class="dial-ring-inner"></div>
+        <div id="ticks"></div>
+        <div class="dial-needle"></div>
+        <div class="dial-center"></div>
+        <div class="dial-label">
+          <div class="num">دقت ۰.۰۱ میلی‌متر</div>
+          <div class="txt">کنترل کیفیت در هر مرحله</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">+۳۲۰۰</div><div class="stat-label">سفارش تکمیل‌شده</div></div>
+    <div class="stat"><div class="stat-num">۲۵</div><div class="stat-label">سال سابقه کار</div></div>
+    <div class="stat"><div class="stat-num">۴۸ساعت</div><div class="stat-label">میانگین زمان تحویل</div></div>
+    <div class="stat"><div class="stat-num">۴.۹/۵</div><div class="stat-label">رضایت مشتریان</div></div>
+  </div>
+</div>
+
+<div class="sec" id="services">
+  <div class="sec-head">
+    <div class="sec-eyebrow">خدمات ما</div>
+    <h2 class="sec-title">از طراحی تا تحویل قطعه نهایی</h2>
+    <p class="sec-sub">با دستگاه‌های مدرن CNC و اپراتورهای مجرب، قطعات شما رو با بالاترین دقت می‌سازیم</p>
+  </div>
+  <div class="services-grid">
+    <div class="svc-card">
+      <div class="svc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#dba85f" stroke-width="2"/><circle cx="12" cy="12" r="3" fill="#dba85f"/><path d="M12 3V5M12 19V21M21 12H19M5 12H3" stroke="#dba85f" stroke-width="2" stroke-linecap="round"/></svg></div>
+      <h3>تراشکاری CNC</h3>
+      <p>تولید قطعات استوانه‌ای و پیچیده با دستگاه‌های CNC مدرن و دقت بالا برای صنایع خودرو و ماشین‌سازی.</p>
+      <div class="svc-price">شروع قیمت از ۱۵۰,۰۰۰ تومان</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="2" stroke="#dba85f" stroke-width="2"/><path d="M4 9H20M9 9V20" stroke="#dba85f" stroke-width="2"/></svg></div>
+      <h3>فرزکاری صنعتی</h3>
+      <p>برش و شکل‌دهی دقیق سطوح فلزی برای ساخت قالب، فیکسچر و قطعات سفارشی با تلرانس بالا.</p>
+      <div class="svc-price">شروع قیمت از ۲۰۰,۰۰۰ تومان</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M5 19L19 5M9 5H5V9M15 19H19V15" stroke="#dba85f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>جوشکاری تخصصی</h3>
+      <p>جوش آرگون، CO2 و الکترود برای اتصال دقیق قطعات فلزی با استحکام بالا و ظاهر تمیز.</p>
+      <div class="svc-price">شروع قیمت از ۸۰,۰۰۰ تومان</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M12 2L4 7V17L12 22L20 17V7L12 2Z" stroke="#dba85f" stroke-width="2" stroke-linejoin="round"/><path d="M12 22V12M12 12L4 7M12 12L20 7" stroke="#dba85f" stroke-width="2" stroke-linejoin="round"/></svg></div>
+      <h3>ساخت قطعات یدکی</h3>
+      <p>بازسازی و ساخت قطعات یدکی نایاب ماشین‌آلات صنعتی و خودرو، طبق نقشه یا نمونه اولیه.</p>
+      <div class="svc-price">قیمت بر اساس استعلام</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><path d="M3 12L9 18L21 6" stroke="#dba85f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <h3>کنترل کیفیت دقیق</h3>
+      <p>اندازه‌گیری با کولیس دیجیتال و دستگاه‌های اندازه‌گیری دقیق پیش از تحویل هر سفارش.</p>
+      <div class="svc-price">بدون هزینه اضافه</div>
+    </div>
+    <div class="svc-card">
+      <div class="svc-icon"><svg width="26" height="26" viewBox="0 0 24 24" fill="none"><rect x="3" y="11" width="18" height="10" rx="2" stroke="#dba85f" stroke-width="2"/><path d="M7 11V7a5 5 0 0110 0v4" stroke="#dba85f" stroke-width="2"/></svg></div>
+      <h3>طراحی و مشاوره فنی</h3>
+      <p>راهنمایی در انتخاب جنس و روش ساخت مناسب برای کاهش هزینه و افزایش طول عمر قطعه.</p>
+      <div class="svc-price">رایگان برای مشتریان</div>
+    </div>
+  </div>
+</div>
+
+<div class="gallery-section" id="gallery">
+  <div class="gallery-inner">
+    <div class="sec-head">
+      <div class="sec-eyebrow">نمونه کارها</div>
+      <h2 class="sec-title">قطعاتی که ساختیم</h2>
+      <p class="sec-sub">گوشه‌ای از پروژه‌های تکمیل‌شده برای صنایع مختلف</p>
+    </div>
+    <div class="gallery-grid">
+      <div class="g-item">
+        <svg class="part-icon" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="38" stroke="#c08a3e" stroke-width="3"/><circle cx="50" cy="50" r="14" stroke="#8a9098" stroke-width="3"/><circle cx="50" cy="20" r="4" fill="#8a9098"/><circle cx="50" cy="80" r="4" fill="#8a9098"/><circle cx="20" cy="50" r="4" fill="#8a9098"/><circle cx="80" cy="50" r="4" fill="#8a9098"/></svg>
+        <div class="g-label">فلنج صنعتی</div>
+      </div>
+      <div class="g-item">
+        <svg class="part-icon" viewBox="0 0 100 100" fill="none"><path d="M30 80V30C30 24 35 20 40 20H60C65 20 70 24 70 30V80" stroke="#c08a3e" stroke-width="3"/><path d="M20 80H80" stroke="#8a9098" stroke-width="3"/><path d="M40 50H60" stroke="#8a9098" stroke-width="2"/></svg>
+        <div class="g-label">محور پله‌ای</div>
+      </div>
+      <div class="g-item">
+        <svg class="part-icon" viewBox="0 0 100 100" fill="none"><circle cx="50" cy="50" r="34" stroke="#c08a3e" stroke-width="3"/><circle cx="50" cy="50" r="34" stroke="#8a9098" stroke-width="2" stroke-dasharray="3 5"/><circle cx="50" cy="50" r="8" fill="#8a9098"/></svg>
+        <div class="g-label">چرخ‌دنده ماژول</div>
+      </div>
+      <div class="g-item">
+        <svg class="part-icon" viewBox="0 0 100 100" fill="none"><rect x="25" y="25" width="50" height="50" rx="4" stroke="#c08a3e" stroke-width="3"/><circle cx="35" cy="35" r="3" fill="#8a9098"/><circle cx="65" cy="35" r="3" fill="#8a9098"/><circle cx="35" cy="65" r="3" fill="#8a9098"/><circle cx="65" cy="65" r="3" fill="#8a9098"/></svg>
+        <div class="g-label">پایه فیکسچر</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="sec order-section" id="order">
+  <div class="order-wrap">
+    <div class="order-info">
+      <h2>سفارش‌تون رو آنلاین ثبت کنید</h2>
+      <p>کافیه نقشه یا عکس قطعه‌تون رو آپلود کنید، مشخصات رو وارد کنید و منتظر تماس ما برای تایید قیمت و زمان تحویل بمونید.</p>
+      <div class="order-steps">
+        <div class="o-step">
+          <div class="o-step-num">۱</div>
+          <div class="o-step-text"><strong>ثبت اطلاعات سفارش</strong><span>مشخصات قطعه، جنس و تعداد مورد نیاز رو وارد کنید</span></div>
+        </div>
+        <div class="o-step">
+          <div class="o-step-num">۲</div>
+          <div class="o-step-text"><strong>تماس برای تایید قیمت</strong><span>کارشناس ما در کمتر از ۲ ساعت باهاتون تماس می‌گیره</span></div>
+        </div>
+        <div class="o-step">
+          <div class="o-step-num">۳</div>
+          <div class="o-step-text"><strong>ساخت و کنترل کیفیت</strong><span>قطعه شما با دقت بالا ساخته و بازرسی میشه</span></div>
+        </div>
+        <div class="o-step">
+          <div class="o-step-num">۴</div>
+          <div class="o-step-text"><strong>تحویل یا ارسال</strong><span>دریافت حضوری یا ارسال با پست/باربری به آدرس شما</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="order-form">
+      <div id="form-success" style="display:none;background:#f0fff4;border:1px solid #6ee7b7;border-radius:8px;padding:1.25rem;text-align:center;margin-bottom:1.25rem;">
+        <div style="font-size:2rem;margin-bottom:0.5rem;">✅</div>
+        <strong style="color:#065f46;font-size:15px;">سفارش شما با موفقیت ثبت شد!</strong>
+        <p style="color:#047857;font-size:13px;margin-top:4px;">کارشناسان ما در کمتر از ۲ ساعت باهاتون تماس می‌گیرن.</p>
+      </div>
+      <div id="form-error" style="display:none;background:#fff5f5;border:1px solid #fc8181;border-radius:8px;padding:1rem;margin-bottom:1.25rem;color:#c53030;font-size:13px;"></div>
+      <div class="form-grid-2">
+        <div class="form-row"><label>نام و نام خانوادگی</label><input id="field-name" type="text" placeholder="مثلاً: علی محمدی"></div>
+        <div class="form-row"><label>شماره تماس</label><input id="field-phone" type="tel" placeholder="۰۹۱۲۳۴۵۶۷۸۹"></div>
+      </div>
+      <div class="form-row">
+        <label>نوع خدمت مورد نیاز</label>
+        <select id="field-service">
+          <option>تراشکاری CNC</option>
+          <option>فرزکاری صنعتی</option>
+          <option>جوشکاری تخصصی</option>
+          <option>ساخت قطعه یدکی</option>
+          <option>سایر / مشاوره</option>
+        </select>
+      </div>
+      <div class="form-grid-2">
+        <div class="form-row"><label>جنس قطعه</label><input id="field-material" type="text" placeholder="مثلاً: فولاد، آلومینیوم"></div>
+        <div class="form-row"><label>تعداد</label><input id="field-quantity" type="number" placeholder="۱" min="1"></div>
+      </div>
+      <div class="form-row">
+        <label>توضیحات سفارش</label>
+        <textarea id="field-description" placeholder="ابعاد قطعه، تلرانس مورد نیاز و سایر جزئیات..."></textarea>
+      </div>
+      <div class="form-row">
+        <label>آپلود نقشه یا عکس قطعه</label>
+        <div class="upload-box">
+          <svg class="up-icon" viewBox="0 0 24 24" fill="none"><path d="M12 16V4M12 4L7 9M12 4L17 9" stroke="#8a9098" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M4 16V19C4 20 5 21 6 21H18C19 21 20 20 20 19V16" stroke="#8a9098" stroke-width="2" stroke-linecap="round"/></svg>
+          <span>فایل را بکشید یا کلیک کنید (PDF, JPG, PNG)</span>
+        </div>
+      </div>
+      <button class="submit-btn" id="submit-btn" type="button" onclick="submitOrder()">ثبت سفارش</button>
+      <div class="form-note">با ثبت سفارش، قوانین و مقررات سایت رو می‌پذیرید</div>
+    </div>
+  </div>
+</div>
+
+<div class="sec">
+  <div class="sec-head">
+    <div class="sec-eyebrow">نظرات مشتریان</div>
+    <h2 class="sec-title">چرا مشتری‌ها به ما اعتماد کردن</h2>
+  </div>
+  <div class="testi-grid">
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p>"کیفیت کار فوق‌العاده بود و دقیقاً طبق نقشه‌ای که فرستاده بودم تحویل گرفتم. سرعت کارشون هم عالی بود."</p>
+      <div class="testi-person"><div class="testi-avatar">ر.ک</div><div><div class="testi-name">رضا کریمی</div><div class="testi-role">مدیر تولید، شرکت فنی پارس</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p>"برای ساخت یه قطعه یدکی نایاب چند جا رفتم جواب نگرفتم، اینجا با کمترین هزینه و در کمترین زمان ساختن."</p>
+      <div class="testi-person"><div class="testi-avatar">م.ج</div><div><div class="testi-name">محسن جعفری</div><div class="testi-role">صاحب کارگاه تولیدی</div></div></div>
+    </div>
+    <div class="testi-card">
+      <div class="testi-stars">★★★★★</div>
+      <p>"همکاری مستمر چندین ساله داریم. دقت کارشون و پیگیری سفارش‌ها واقعاً حرفه‌ایه."</p>
+      <div class="testi-person"><div class="testi-avatar">س.ا</div><div><div class="testi-name">سینا احمدی</div><div class="testi-role">مهندس خرید، صنایع فلزی البرز</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div>
+      <h2>با ما در تماس باشید</h2>
+      <p>برای استعلام قیمت، مشاوره فنی یا بازدید از کارگاه، همین حالا تماس بگیرید</p>
+      <div class="c-row">
+        <div class="c-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M22 16.92V19.92C22 20.97 21.16 21.83 20.11 21.79C9.45 21.16 1.84 13.55 1.21 2.89C1.17 1.84 2.03 1 3.08 1H6.08C7.06 1 7.87 1.74 7.97 2.71L8.45 6.36C8.55 7.13 8.24 7.9 7.63 8.39L6.08 9.59C7.4 12.39 9.61 14.6 12.41 15.92L13.61 14.37C14.1 13.76 14.87 13.45 15.64 13.55L19.29 14.03C20.26 14.13 21 14.94 21 15.92" stroke="#dba85f" stroke-width="2"/></svg></div>
+        <div><strong>تماس تلفنی</strong><span>۰۳۱۳۵۵۵۱۲۳۴ — ۰۹۱۲۱۲۳۴۵۶۷</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M3 5C3 3.9 3.9 3 5 3H19C20.1 3 21 3.9 21 5V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5Z" stroke="#dba85f" stroke-width="2"/><path d="M3 7L12 13L21 7" stroke="#dba85f" stroke-width="2"/></svg></div>
+        <div><strong>ایمیل</strong><span>info@alborzlathe.ir</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M21 10C21 17 12 23 12 23C12 23 3 17 3 10C3 5 7 1 12 1C17 1 21 5 21 10Z" stroke="#dba85f" stroke-width="2"/><circle cx="12" cy="10" r="3" stroke="#dba85f" stroke-width="2"/></svg></div>
+        <div><strong>آدرس کارگاه</strong><span>اصفهان، شهرک صنعتی، خیابان فلزکاران، پلاک ۱۴</span></div>
+      </div>
+      <div class="c-row">
+        <div class="c-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="#dba85f" stroke-width="2"/><path d="M12 7V12L15 15" stroke="#dba85f" stroke-width="2" stroke-linecap="round"/></svg></div>
+        <div><strong>ساعات کاری</strong><span>شنبه تا پنج‌شنبه، ۸ صبح تا ۸ شب</span></div>
+      </div>
+    </div>
+    <div class="map-box">نقشه موقعیت کارگاه (نمونه)</div>
+  </div>
+</div>
+
+<footer>
+  این یک سایت نمونه (دمو) طراحی‌شده توسط امید حفیظی است — تراشکاری صنعتی البرز نام فرضی است.
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// ── Supabase ──
+const SUPA_URL = 'https://igjayoknfknevhjwzpgu.supabase.co';
+const SUPA_KEY = 'sb_publishable_Tyhz5bOXQVZoAhfccVtuLQ_TbGUzEvI';
+const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+
+// ── Dial ticks ──
+const ticks = document.getElementById('ticks');
+for(let i=0;i<24;i++){
+  const t = document.createElement('div');
+  t.className = 'dial-tick' + (i%3===0?' major':'');
+  t.style.transform = `rotate(${i*15}deg)`;
+  ticks.appendChild(t);
+}
+
+// ── Submit order ──
+async function submitOrder(){
+  const btn = document.getElementById('submit-btn');
+  const successBox = document.getElementById('form-success');
+  const errorBox = document.getElementById('form-error');
+
+  // Get values
+  const name = document.getElementById('field-name').value.trim();
+  const phone = document.getElementById('field-phone').value.trim();
+  const service = document.getElementById('field-service').value;
+  const material = document.getElementById('field-material').value.trim();
+  const quantity = parseInt(document.getElementById('field-quantity').value) || 1;
+  const description = document.getElementById('field-description').value.trim();
+
+  // Validate
+  if(!name || !phone){
+    errorBox.textContent = '⚠️ لطفاً نام و شماره تماس رو وارد کنید.';
+    errorBox.style.display = 'block';
+    return;
+  }
+
+  // Loading state
+  btn.textContent = 'در حال ثبت...';
+  btn.disabled = true;
+  errorBox.style.display = 'none';
+
+  try {
+    const { error } = await db.from('orders').insert([{
+      full_name: name,
+      phone: phone,
+      service_type: service,
+      part_material: material,
+      quantity: quantity,
+      description: description,
+      status: 'جدید'
+    }]);
+
+    if(error) throw error;
+
+    // Success
+    successBox.style.display = 'block';
+    // Reset form
+    ['field-name','field-phone','field-material','field-description'].forEach(id=>{
+      document.getElementById(id).value = '';
+    });
+    document.getElementById('field-quantity').value = '';
+    btn.textContent = 'ثبت سفارش جدید';
+    btn.disabled = false;
+    btn.onclick = ()=>{ successBox.style.display='none'; btn.textContent='ثبت سفارش'; btn.onclick=submitOrder; };
+
+  } catch(err){
+    errorBox.textContent = '❌ خطا در ثبت سفارش: ' + (err.message || 'لطفاً دوباره امتحان کنید.');
+    errorBox.style.display = 'block';
+    btn.textContent = 'ثبت سفارش';
+    btn.disabled = false;
+  }
+}
+</script>
+</body>
+</html>
