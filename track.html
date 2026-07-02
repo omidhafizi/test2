@@ -26,9 +26,6 @@ h2{font-size:1.4rem;font-weight:800;margin-bottom:1.5rem;text-align:center;}
 .order-row span:first-child{color:#565c64;}
 .order-row span:last-child{font-weight:700;color:#15171a;}
 .status-badge{display:inline-block;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:700;}
-.status-جدید{background:#dbeafe;color:#1e40af;}
-.status-در حال ساخت{background:#fef3c7;color:#92400e;}
-.status-تکمیل شده{background:#d1fae5;color:#065f46;}
 .no-order{text-align:center;color:#565c64;padding:2rem 0;font-size:15px;}
 </style>
 </head>
@@ -46,7 +43,6 @@ h2{font-size:1.4rem;font-weight:800;margin-bottom:1.5rem;text-align:center;}
       <input type="tel" id="phone-input" placeholder="مثلاً: ۰۹۱۲۳۴۵۶۷۸۹">
     </div>
     <button class="btn" onclick="trackOrder()">جستجو</button>
-    
     <div id="results" class="result-box"></div>
   </div>
 </div>
@@ -54,30 +50,36 @@ h2{font-size:1.4rem;font-weight:800;margin-bottom:1.5rem;text-align:center;}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
 const SUPA_URL = 'https://igjayoknfknevhjwzpgu.supabase.co';
-// ترفند رد شدن از فایروال کلودفلر
-window.supabase = window.supabase || {};
-  const SUPA_KEY = 'sb_publishable_Tyhz5bOXQVZoAhfccVtuLQ_TbGUzEvI';
-const db = window.supabase.createClient(SUPA_URL, SUPA_KEY);
+const SUPA_KEY = 'sb_publishable_Tyhz5bOXQVZoAhfccVtuLQ_TbGUzEvI';
+const db = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+const statusColors = {
+  'جدید': 'background:#dbeafe;color:#1e40af;',
+  'در حال ساخت': 'background:#fef3c7;color:#92400e;',
+  'تکمیل شده': 'background:#d1fae5;color:#065f46;',
+};
 
 async function trackOrder() {
   const phone = document.getElementById('phone-input').value.trim();
   const resultsDiv = document.getElementById('results');
-  
+
   if(!phone) { alert('لطفاً شماره تلفن را وارد کنید'); return; }
-  
-  resultsDiv.innerHTML = '<p style="text-align:center;">در حال جستجو...</p>';
+
+  resultsDiv.innerHTML = '<p style="text-align:center;color:#565c64;">در حال جستجو...</p>';
   resultsDiv.style.display = 'block';
 
-  const { data: orders, error } = await db.from('orders')
+  const { data: orders, error } = await db
+    .from('orders')
     .select('*')
     .eq('phone', phone)
     .order('created_at', { ascending: false });
 
-  if (error) {
-    resultsDiv.innerHTML = `<div class="no-order" style="color:red;">⚠️ خطا در اتصال به دیتابیس: ${error.message}</div>`;
+  if(error){
+    resultsDiv.innerHTML = `<div class="no-order" style="color:red;">⚠️ خطا: ${error.message}</div>`;
     return;
   }
-  if (orders.length === 0) {
+
+  if(!orders || orders.length === 0){
     resultsDiv.innerHTML = '<div class="no-order">❌ سفارشی با این شماره یافت نشد.</div>';
     return;
   }
@@ -85,13 +87,16 @@ async function trackOrder() {
   let html = '';
   orders.forEach(order => {
     const date = new Date(order.created_at).toLocaleDateString('fa-IR');
+    const statusStyle = statusColors[order.status] || 'background:#f3f4f5;color:#565c64;';
     html += `
       <div class="order-card">
-        <div class="order-row"><span>شناسه سفارش:</span><span>#${order.id.slice(0,8)}</span></div>
-        <div class="order-row"><span>نوع خدمت:</span><span>${order.service_type}</span></div>
+        <div class="order-row"><span>شناسه سفارش:</span><span>#${String(order.id).slice(0,8)}</span></div>
+        <div class="order-row"><span>نوع خدمت:</span><span>${order.service_type || '-'}</span></div>
+        <div class="order-row"><span>جنس قطعه:</span><span>${order.part_material || '-'}</span></div>
+        <div class="order-row"><span>تعداد:</span><span>${order.quantity || '-'}</span></div>
         <div class="order-row"><span>تاریخ ثبت:</span><span>${date}</span></div>
-        <div class="order-row"><span>وضعیت:</span><span class="status-badge status-${order.status}">${order.status}</span></div>
-        ${order.file_url ? `<div class="order-row"><span>فایل پیوست:</span><span><a href="${order.file_url}" target="_blank" style="color:#c08a3e;text-decoration:none;">مشاهده فایل</a></span></div>` : ''}
+        <div class="order-row"><span>وضعیت:</span><span class="status-badge" style="${statusStyle}">${order.status || 'جدید'}</span></div>
+        ${order.file_url ? `<div class="order-row"><span>فایل پیوست:</span><span><a href="${order.file_url}" target="_blank" style="color:#c08a3e;">مشاهده فایل</a></span></div>` : ''}
       </div>
     `;
   });
